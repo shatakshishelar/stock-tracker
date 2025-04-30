@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dqe@m*2_s4sxa9ofdiq+z0&()qw5^uu1-hre8+c4u+ta@dihbf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stock-tracker-2m7y.onrender.com']
 
 
 # Application definition

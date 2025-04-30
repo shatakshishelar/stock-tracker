@@ -1,0 +1,11 @@
+<h2>All Stocks</h2>
+<ul>
+  {% for stock in stocks %}
+    <li>
+      {{ stock.symbol }} - {{ stock.company_name }}
+      [<a href="{% url 'update_stock' stock.id %}">Edit</a>]
+      [<a href="{% url 'delete_stock' stock.id %}">Delete</a>]
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'add_stock' %}">Add Another Stock</a>

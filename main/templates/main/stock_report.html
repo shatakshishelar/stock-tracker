@@ -1,0 +1,17 @@
+<h2>Stock Report</h2>
+<form method="get">
+    <select name="stock_id">
+        {% for stock in stocks %}
+            <option value="{{ stock.id }}">{{ stock.symbol }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Show Report</button>
+</form>
+
+{% if prices %}
+  <ul>
+    {% for p in prices %}
+      <li>{{ p.date }} - ${{ p.price }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

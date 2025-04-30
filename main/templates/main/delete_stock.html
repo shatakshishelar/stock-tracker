@@ -1,0 +1,8 @@
+<h2>Delete Stock</h2>
+<p>Are you sure you want to delete "{{ stock.symbol }} - {{ stock.company_name }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'list_stocks' %}">Cancel</a>
+</form>

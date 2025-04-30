@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Portfolio Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container py-5">
+
+    <h2>📊 Portfolio Report (Prepared SQL)</h2>
+    <table class="table table-bordered mt-4">
+        <thead class="table-light">
+            <tr>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Total Qty</th>
+                <th>Avg Buy Price</th>
+                <th>Current Price</th>
+                <th>Total Gain/Loss</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in report_data %}
+            <tr>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                <td>{{ row.2 }}</td>
+                <td>${{ row.3|floatformat:2 }}</td>
+                <td>${{ row.4|floatformat:2 }}</td>
+                <td>
+                    <strong class="{% if row.5 >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        ${{ row.5|floatformat:2 }}
+                    </strong>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'portfolio_report' %}" class="btn btn-info mb-4">📊 View Portfolio Report</a>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-3">← Back to Dashboard</a>
+
+</body>
+</html>

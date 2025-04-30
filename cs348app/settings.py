@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['stock-tracker-2m7y.onrender.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [

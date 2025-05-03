@@ -111,3 +111,29 @@ def portfolio_report(request):
 
     return render(request, 'main/report.html', {'report_data': rows})
 
+from django.db import connection
+from django.shortcuts import render
+from .models import Stock
+
+def raw_report(request):
+    results = []
+    selected_symbol = None
+
+    if request.method == 'POST':
+        selected_symbol = request.POST.get('symbol')
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT s.symbol, p.quantity, p.buy_price, p.purchase_date
+                FROM main_purchase p
+                JOIN main_stock s ON p.stock_id = s.id
+                WHERE s.symbol = %s
+            """, [selected_symbol])  # ✅ Prepared statement using parameter
+            results = cursor.fetchall()
+
+    stocks = Stock.objects.all()  # For dropdown
+    return render(request, 'main/raw_report.html', {
+        'results': results,
+        'stocks': stocks,
+        'selected_symbol': selected_symbol
+    })

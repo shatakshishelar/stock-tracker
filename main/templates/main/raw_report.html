@@ -1,0 +1,29 @@
+<h2>Raw SQL Report: Filter Purchases by Stock Symbol</h2>
+
+<form method="POST">
+  {% csrf_token %}
+  <label for="symbol">Select Stock:</label>
+  <select name="symbol">
+    {% for stock in stocks %}
+      <option value="{{ stock.symbol }}" {% if stock.symbol == selected_symbol %}selected{% endif %}>
+        {{ stock.symbol }}
+      </option>
+    {% endfor %}
+  </select>
+  <button type="submit">Get Report</button>
+</form>
+
+{% if results %}
+  <h3>Results:</h3>
+  <table>
+    <tr><th>Symbol</th><th>Quantity</th><th>Buy Price</th><th>Purchase Date</th></tr>
+    {% for row in results %}
+      <tr>
+        <td>{{ row.0 }}</td>
+        <td>{{ row.1 }}</td>
+        <td>{{ row.2 }}</td>
+        <td>{{ row.3 }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}

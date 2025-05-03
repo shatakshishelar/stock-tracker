@@ -11,8 +11,12 @@
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">📈 Stock Portfolio Tracker</h1>
-    <a href="{% url 'portfolio_report' %}" class="btn btn-info">📊 View Report</a>
+    <div>
+        <a href="{% url 'portfolio_report' %}" class="btn btn-info me-2">📊 View Report</a>
+        <a href="{% url 'raw_report' %}" class="btn btn-secondary">🧮 Raw SQL Report</a>
+    </div>
 </div>
+
 
 
 

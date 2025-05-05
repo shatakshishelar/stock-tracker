@@ -5,6 +5,8 @@ from .forms import PurchaseForm, CurrentPriceForm
 from django.db import connection
 from django.db import transaction
 
+# We use transaction.atomic to ensure consistency in multi-user scenarios.
+# Django defaults to READ COMMITTED isolation level, which prevents dirty reads.
 
 def dashboard(request):
     # Default forms
@@ -20,17 +22,30 @@ def dashboard(request):
                     form.save()
                 return redirect('dashboard')
 
-        elif 'update_price' in request.POST:
-            price_form = CurrentPriceForm(request.POST)
-            if price_form.is_valid():
-                with transaction.atomic():  # ✅ Transaction ensures price update is safe
-                    stock = price_form.cleaned_data['stock']
-                    CurrentPrice.objects.update_or_create(
-                        stock=stock,
-                        defaults={'current_price': price_form.cleaned_data['current_price']}
-                    )
-                return redirect('dashboard')
 
+        elif 'update_price' in request.POST:
+
+            price_form = CurrentPriceForm(request.POST)
+
+            if price_form.is_valid():
+                # ✅ Start a transaction for safe concurrent updates
+
+                # Django uses READ COMMITTED isolation level by default, preventing dirty reads
+
+                # select_for_update() locks the row to prevent race conditions during update
+
+                with transaction.atomic():
+                    stock = Stock.objects.select_for_update().get(id=price_form.cleaned_data['stock'].id)
+
+                    CurrentPrice.objects.update_or_create(
+
+                        stock=stock,
+
+                        defaults={'current_price': price_form.cleaned_data['current_price']}
+
+                    )
+
+                return redirect('dashboard')
 
     # Always fetch fresh data AFTER handling forms
     prices = {cp.stock_id: cp.current_price for cp in CurrentPrice.objects.all()}
